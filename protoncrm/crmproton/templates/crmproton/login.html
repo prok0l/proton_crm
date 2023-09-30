@@ -1,0 +1,32 @@
+<!-- /login/ -->
+
+{% extends 'base_index.html' %}
+{% load bootstrap %}
+
+
+{% block title %}Войти - Proton CRM{% endblock %}
+
+{% block content %}
+<div class="login_form_center">
+    <form method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Войти</legend>
+            <div class="form-floating mb-3">
+            {{ form.username|bootstrap }}
+                <!-- <input type="text" class="form-control" id="username" placeholder="name@example.com">
+                <label for="username">Имя пользователя</label> -->
+            </div>
+            <div class="form-floating">
+                {{ form.password|bootstrap }}
+                <!-- <input type="password" class="form-control" id="password" placeholder="Пароль">
+                <label for="password">Пароль</label> -->
+            </div>
+        </fieldset>
+        <p></p>
+        <button type="submit" class="btn btn-primary">Войти</button>
+        <a href="/login/forgot/"><button type="button" class="btn btn-danger">Забыли пароль?</button></a>
+    </form>
+
+</div>
+{% endblock %}

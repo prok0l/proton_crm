@@ -1,0 +1,79 @@
+<!-- /index/ -->
+
+{% extends 'base_index.html' %}
+{% load bootstrap %}
+
+
+{% block title %}Заявка {{ task_info.task.id }} {% endblock %}
+
+{% block content %}
+<main class="container mt-1 p-5">
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <th>Заявка</th>
+        <th>{{ task_info.task.id }}</th>
+      </tr>
+
+      <tr>
+        <th>Текст:</th>
+        <th>{{ task_info.task.name }}</th>
+      </tr>
+
+      <tr>
+        <th>Заказчик:</th>
+        <th>{{ task_info.task.customer }}</th>
+      </tr>
+
+      <tr>
+        <th>Местоположение:</th>
+        <th>{{ task_info.task.location }}</th>
+      </tr>
+
+      {% if task_info.task.files %}
+        <tr>
+        <th>Фото:</th>
+          <th>
+            <img src="{{ MEDIA_URL }}{{ task_info.task.files }}" width="400"></img>
+          </th>
+        </tr>
+      {% endif %}
+
+      <tr>
+        <th>Срочность: </th>
+        <th>
+          {% if task_info.task_level %}
+          {{ task_info.task_level.name }}
+          {% else %}
+          Не указана
+          {% endif %}
+        </th>
+      </tr>
+
+      <tr>
+        <th>Статус: </th>
+        <th>
+          {% if task_info.task_state %}
+          {{ task_info.task_state.name }}
+          {% else %}
+          Не указан
+          {% endif %}
+        </th>
+      </tr>
+
+      <tr>
+        <th>Исполнители: </th>
+        <th>
+          {% if task_info.task_workers %}
+          {% for worker in task_info.task_workers %}
+            {{ worker.name }}<br>
+          {% endfor %}
+          {% else %}
+
+          {% endif %}
+        </th>
+      </tr>
+    </tbody>
+  </table>
+</main>
+{% endblock %}

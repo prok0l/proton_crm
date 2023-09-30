@@ -1,0 +1,61 @@
+<!-- template for _index_ pages -->
+
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        {% load static %}
+        <meta charset="utf-8", lang="ru">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon"> -->
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <!-- <a href="/"><img height="40px" src="{% static 'img/logo.png' %}"></a> -->
+              <a class="navbar-brand" href="/">Proton CRM</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                  <li class="nav-item">
+                    <a class="nav-link {% block active_main %} {% endblock %}" href="/">Главная
+                      <span class="visually-hidden">(current)</span>
+                    </a>
+                  </li>
+                  </table>
+                </ul>
+                <div>
+                  {% if user.is_authenticated %}
+                    <table>
+                      <td>
+                        <a href="/myaccount/"><button type="button" class="btn btn-info">Управление аккаутном</button></a>
+                      </td>
+                      <td>
+                        <a href="/logout/"><button type="button" class="btn btn-danger">Выйти</button></a>
+                      </td>
+                    </table>
+                      
+                  {% else %}
+                      <a href="/login/"><button type="button" class="btn btn-info">Войти</button></a>
+                  {% endif %}
+
+                </div>
+              </div>
+            </div>
+          </nav>
+
+
+        {% block content %}
+        {% endblock %}
+    </body>
+
+</html>

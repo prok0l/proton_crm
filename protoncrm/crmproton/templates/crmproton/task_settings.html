@@ -1,0 +1,137 @@
+{% extends 'base_index.html' %}
+{% load bootstrap %}
+
+
+{% block title %}Создать заявку{% endblock %}
+
+{% block content %}
+{% load static %}
+<style>
+    .checkselect-control select {
+        height: 35px;
+    }
+</style>
+<main class="container mt-1 p-5">
+
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <th>Заявка</th>
+                <th>{{ task_info.task.id }}</th>
+            </tr>
+
+            <tr>
+                <th>Текст:</th>
+                <th>{{ task_info.task.name }}</th>
+            </tr>
+
+            <tr>
+                <th>Заказчик:</th>
+                <th>{{ task_info.task.customer }}</th>
+            </tr>
+
+            <tr>
+                <th>Местоположение:</th>
+                <th>{{ task_info.task.location }}</th>
+            </tr>
+
+            {% if task_info.task.files %}
+            <tr>
+                <th>Фото:</th>
+                <th>
+                    <img src="{{ MEDIA_URL }}{{ task_info.task.files }}"
+                         width="400"></img>
+                </th>
+            </tr>
+            {% endif %}
+
+            <tr>
+                <th>Срочность:</th>
+                <th>
+                    {% if user.is_admin %}
+                    <select name="level" class="form-select form-select-sm"
+                            style="max-width: 200px; font-size: 0.8rem; height: 35px">
+                        {% if task_info.task_level %}
+                        <option disabled selected="selected">
+                          {{task_info.task_level.name }}
+                        </option>
+                        {% else %}
+                        <option disabled selected="selected">Выберите
+                            срочность
+                        </option>
+                        {% endif %}
+                          {% for level in levels %}
+                            {% if level != task_info.task_level %}
+                            <option name="{{ level.id }}">{{ level.name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                    </select>
+                    {% else %}
+                      {% if task_info.task_level %}
+                      {{ task_info.task_level.name }}
+                      {% else %}
+                      Не указана
+                      {% endif %}
+                    {% endif %}
+                </th>
+            </tr>
+
+            <tr>
+                <th>Статус:</th>
+                <th>
+                    <select name="state" class="form-select form-select-sm"
+                            style="max-width: 200px; font-size: 0.8rem; height: 35px">
+                        {% if task_info.task_state %}
+                        <option disabled selected="selected">
+                          {{task_info.task_state.name }}
+                        </option>
+                        {% else %}
+                        <option disabled selected="selected">Выберите статус
+                        </option>
+                        {% endif %}
+                        {% for state in states %}
+                        {% if state != task_info.task_state %}
+                        <option name="{{ state.id }}">{{ state.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </th>
+            </tr>
+
+            <tr>
+                <th>Исполнители:</th>
+                <th>
+                    {% if user.is_admin %}
+                    <div class="checkselect">
+                        {% for worker in workers %}
+                        {% if worker in task_info.task_workers %}
+                        <label><input type="checkbox" name="workers"
+                                      value="{{ worker.id }}" checked>
+                          {{worker.name }}</label>
+                        {% else %}
+                        <label><input type="checkbox" name="workers"
+                                      value="{{ worker.id }}">{{ worker.name }}</label>
+                        {% endif %}
+                        {% endfor %}
+                      {% else %}
+                        {% if task_info.task_workers %}
+                        {% for worker in task_info.task_workers %}
+                          {{ worker.name }}<br>
+                        {% endfor %}
+                        {% else %}
+
+                        {% endif %}
+                      {% endif %}
+                    </div>
+                </th>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+    <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
+    <script src="{% static 'js/plugin_checkbox.js' %}"></script>
+</main>
+{% endblock %}

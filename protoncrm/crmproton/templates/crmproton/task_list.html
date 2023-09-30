@@ -1,0 +1,49 @@
+<!-- /task_list/ -->
+
+{% extends 'base_index.html' %}
+{% load bootstrap %}
+
+
+{% block title %}Создать заявку{% endblock %}
+
+{% block content %}
+<main class="container mt-1 p-1">
+
+    <h2>{{ state }}</h2>
+        <div class="row row-cols-1 row-cols-md-5 g-2">
+            {% for task in tasks %}
+            <div class="col">
+                <div class="card text-white bg-primary mb-3 h-100">
+                    <a href="/task/{{ task.id }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ task.name }}</h5>
+                            <p class="card-text">{{ task.location }}</p>
+                            <p class="card-text">{{ task.customer }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <p><h5>Другие статусы: </h5></p>
+        <div>
+            <div data-filter-title="task">
+                <div class="row row-cols-1 row-cols-md-5 g-2">
+                    {% for x in states %}
+                    <div class="col">
+                    <div class="card text-white bg-primary mb-3 h-100">
+                        <a href="/task_list/{{ x.code }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ x.name }}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+</main>
+
+
+{% endblock %}
