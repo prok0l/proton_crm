@@ -3,3 +3,4 @@ venv/
 protoncrm/db.sqlite3
 protoncrm/.env
 protoncrm/media
+.idea
