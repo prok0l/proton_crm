@@ -29,7 +29,17 @@
         <th>Местоположение:</th>
         <th>{{ task_info.task.location }}</th>
       </tr>
+      <tr>
+        <th>Планируемое время:</th>
+        <th>
+          {% if task_info.task_time %}
+          {{ task_info.task_time.get_time }}
+          {% else %}
+          Не указано
+          {% endif %}
 
+        </th>
+      </tr>
       {% if task_info.task.files %}
         <tr>
         <th>Фото:</th>

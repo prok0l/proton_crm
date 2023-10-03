@@ -42,6 +42,10 @@ class TasksTime(models.Model):
                                   null=True)
     time = models.DateTimeField()
 
+    @property
+    def get_time(self):
+        return self.time.strftime('%Y-%m-%d %H:%M')
+
     class Meta:
         verbose_name_plural = "Планируемое время"
 

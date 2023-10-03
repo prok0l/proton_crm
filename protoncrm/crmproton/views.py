@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
@@ -80,8 +82,8 @@ def task_list(request, state_n=None):
     else:
         tasks = [x.task for x in TasksUsers.objects.filter(user=request.user,
                                                            is_active=True)]
-    tasks = [x for x in tasks if list(TasksStates.objects
-                                      .filter(task=x))[-1].state == state]
+    tasks = set(x for x in tasks if list(TasksStates.objects
+                                      .filter(task=x))[-1].state == state)
     return render(request, 'task_list.html', {'tasks': tasks,
                                               'states': states,
                                               'state': state.name})
@@ -106,13 +108,23 @@ def task_settings(request, task_id):
                        'workers': workers})
     else:
         data = request.POST
+        user = request.user
+        if data.get('date'):
+            link = list(TasksTime.objects.filter(task=task))
+            new_date = data.get('date')
+            if new_date and (not link or link[0].get_time != new_date):
+                print(new_date)
+                TasksTime(task=task,
+                          time=datetime.strptime(new_date, '%Y-%m-%dT%H:%M'),
+                          from_user=user).save()
+
         if data.get('state'):
             state = States.objects.get(name=data.get('state'))
-            TasksStates(task=task, state=state).save()
+            TasksStates(task=task, state=state, from_user=user).save()
         if request.user.is_admin:
             if data.get('level'):
                 level = Levels.objects.get(name=data.get('level'))
-                TasksLevels(task=task, level=level).save()
+                TasksLevels(task=task, level=level, from_user=user).save()
 
             workers = data.get('workers', [])
             workers_links = list(TasksUsers.objects.filter(task=task,
@@ -125,7 +137,7 @@ def task_settings(request, task_id):
             for x in add_worker:
                 if x:
                     TasksUsers(task=task, user=x[0],
-                               from_user=request.user).save()
+                               from_user=user).save()
             for x in del_worker:
                 x.is_active = False
                 x.from_user = request.user

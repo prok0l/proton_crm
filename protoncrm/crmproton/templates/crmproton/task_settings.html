@@ -36,9 +36,13 @@
                 <th>Местоположение:</th>
                 <th>{{ task_info.task.location }}</th>
             </tr>
-
-            {% if task_info.task.files %}
             <tr>
+                <th>Планируемое время: </th>
+                <th><input type="datetime-local" id="localdate" name="date"
+                value="{{ task_info.task_time.get_time }}"/></th>
+            </tr>
+            <tr>
+            {% if task_info.task.files %}
                 <th>Фото:</th>
                 <th>
                     <img src="{{ MEDIA_URL }}{{ task_info.task.files }}"
