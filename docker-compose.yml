@@ -1,18 +1,15 @@
-version: "3.1"
+version: "3"
 
 services:
   main:
     container_name: proton_crm_main
-    build:
-      context: .
-    command: python protoncrm/manage.py runserver localhost:8000
+    build: .
+    command: python3 protoncrm/manage.py runserver 0.0.0.0:8000
     restart: always
     networks:
       - botnet
     env_file:
       - "protoncrm/.env"
-    volumes:
-      - .:/proton_crm
     ports:
       - 8000:8000
 
@@ -20,14 +17,12 @@ services:
     container_name: proton_crm_notify
     build:
       context: .
-    command: python protoncrm/manage.py bot
+    command: python3 protoncrm/manage.py bot
     restart: always
     networks:
       - botnet
     env_file:
       - "protoncrm/.env"
-    volumes:
-      - .:/proton_crm
 
 networks:
   botnet:

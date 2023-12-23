@@ -28,7 +28,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["92.255.107.97", "prok0l.ru", "www.prok0l.ru", "localhost"]
+ALLOWED_HOSTS = ["0.0.0.0", "localhost", "92.255.107.97", "prok0l.ru", "www.prok0l.ru"]
 
 
 

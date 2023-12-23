@@ -1,5 +1,5 @@
 import asyncio
-import aioschedule
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from typing import List, Literal
 
 from aiogram import Bot
@@ -52,8 +52,7 @@ async def overdue_tasks(dp: Dispatcher, rmd_time: int):
     global bot, remind_time
     bot = dp.bot
     remind_time = rmd_time
-    aioschedule.every(1).minutes.do(search_reminded)
-    aioschedule.every(1).minutes.do(search_overdue)
-    while True:
-        await aioschedule.run_pending()
-        await asyncio.sleep(1)
+    sheduler = AsyncIOScheduler()
+    sheduler.add_job(search_reminded, "interval", seconds=remind_time)
+    sheduler.add_job(search_overdue, "interval", seconds=remind_time)
+    sheduler.start()
