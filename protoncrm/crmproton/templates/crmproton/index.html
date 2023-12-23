@@ -1,12 +1,12 @@
 <!-- /index/ -->
 
 {% extends 'base_index.html' %}
-{% load bootstrap %}
 
 
 {% block title %}Создать заявку{% endblock %}
-
+{% load static %}
 {% block content %}
+
 <main class="container mt-1 p-5">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -14,13 +14,35 @@
         <!-- text -->
             <label for="text">Текст заявки</label>
             <textarea class="form-control" id="text" name="text"
-                      required placeholder="Text"></textarea>
+                      placeholder="Text" required></textarea>
         </p>
         <p>
         <!-- customes -->
-            <label for="text">Заказчик</label>
+            <label for="customer">Заказчик</label>
             <input class="form-control" id="customer" name="customer"
                       required placeholder="ФИО"></input>
+        </p>
+        <!-- telephone -->
+        <div>
+            <label for="telephone">Телефон</label>
+<!--                <div class="wrapper__input">-->
+                <input class="form-control" type="tel" data-mask="phone"
+                name="telephone" id="telephone" placeholder="+7(977)777-77-77"
+                       minlength=16 maxlength=16 required/>
+<!--                </div>-->
+        </div>
+        <!-- building -->
+        <p>
+            <div class="form-group">
+                <label class="control-label" for="building">Здание </label>
+                    <div class=" ">
+                      <select name="building" class="form-select form-select" id="building">
+                          {% for item in buildings %}
+                              <option value="{{ item.short_name }}">{{ item.address }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+            </div>
         </p>
         <p>
         <!-- location -->
@@ -28,39 +50,38 @@
             <input class="form-control" id="location" name="location"
                       required placeholder="Кабинет"></input>
         </p>
+        <!-- time -->
         <p>
+        <label for="time">Удобное время</label>
+        <th><input class="form-control" type="datetime-local" id="time" name="time"/></th>
+        </p>
         <!-- photo -->
-        <div class="mb-4 d-flex justify-content">
-            <img src="https://img.icons8.com/?size=160&id=xrSn9N56jUGh&format=png"
-            alt="example placeholder" style="width: 100px;" />
-        </div>
-        <div class="d-flex justify-content">
-            <div class="btn btn-primary btn-rounded">
-                <label class="form-label text-white m-1" for="id_files">Выбрать изображение</label>
-                <input type="file" class="form-control d-none"
-                       id="id_files"
-                       name="files" accept="image/*"/>
+        <p>
+            <label for="id_files">Фото</label>
+            <input class="form-control" type="file" accept="image/*" id="id_files"
+                       name="files"/>
+        </p>
+        <!-- level -->
+        <div>
+            <div class="form-group">
+                <label class="control-label  " for="level">Приоритет задачи: </label>
+                    <div class=" ">
+                      <select name="level" class="form-select form-select" id="level">
+                          {% for item in levels %}
+                            {% if item.pictute %}
+                              <option value="{{ item.name }}">{{ item.picture }}</option>
+                            {% else %}
+                              <option value="{{ item.name }}">{{ item.name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                      </select>
+                    </div>
             </div>
         </div>
-        </p>
-        <p>
-            <div class="form-group">
-                                <label class="control-label  " for="level">Срочность задачи: </label>
-                                    <div class=" ">
-                                      <select name="level" class=" form-control" id="level">
-                                          {% for item in data %}
-                                            {% if item.pictute %}
-                                              <option value="{{ item.name }}">{{ item.picture }}</option>
-                                            {% else %}
-                                              <option value="{{ item.name }}">{{ item.name }}</option>
-                                            {% endif %}
-                                          {% endfor %}
-                                      </select>
-                                    </div>
-                            </div>
-        </p>
+        <br>
         <button type="submit" class="btn btn-primary">Отправить</button>
-    </div>
     </form>
 </main>
+<script src="{% static 'js/imask.js' %}"></script> <!-- Подключаем плагин локально -->
+<script src="{% static 'js/main.js' %}"></script> <!-- Подключаем плагин локально -->
 {% endblock %}

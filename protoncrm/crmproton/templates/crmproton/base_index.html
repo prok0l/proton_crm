@@ -1,4 +1,4 @@
-<!-- template for _index_ pages -->
+<!-- base_index -->
 
 {% load bootstrap5 %}
 {% bootstrap_css %}
@@ -43,7 +43,7 @@
                   {% if user.is_authenticated %}
                     <table>
                       <td>
-                        <a href="/myaccount/"><button type="button" class="btn btn-info">Управление аккаутном</button></a>
+                        <a href="/account/"><button type="button" class="btn btn-info">Управление аккаутном</button></a>
                       </td>
                       <td>
                         <a href="/logout/"><button type="button" class="btn btn-danger">Выйти</button></a>
@@ -63,5 +63,4 @@
         {% block content %}
         {% endblock %}
     </body>
-
 </html>

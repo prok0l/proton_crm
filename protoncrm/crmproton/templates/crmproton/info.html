@@ -1,4 +1,4 @@
-<!-- /index/ -->
+<!-- /info/ -->
 
 {% extends 'base_index.html' %}
 {% load bootstrap %}
@@ -10,27 +10,49 @@
 <main class="container mt-1 p-5">
   <table class="table table-striped">
     <tbody>
+      <!-- id -->
       <tr>
         <th>Заявка</th>
         <th>{{ task_info.task.id }}</th>
       </tr>
-
+      <!-- text -->
       <tr>
-        <th>Текст:</th>
+        <th>Текст</th>
         <th>{{ task_info.task.name }}</th>
       </tr>
-
+      <!-- customer -->
       <tr>
-        <th>Заказчик:</th>
+        <th>Заказчик</th>
         <th>{{ task_info.task.customer }}</th>
       </tr>
-
+      <!-- telephone -->
       <tr>
-        <th>Местоположение:</th>
+        <th>Телефон</th>
+        <th>{% if task_info.task.telephone %}
+              {{ task_info.task.telephone }}
+            {% else %}
+              Не указано
+            {% endif %}
+        </th>
+      </tr>
+      <!-- building -->
+      <tr>
+        <th>Здание</th>
+        <th>{{ task_info.task.building }}</th>
+      </tr>
+      <!-- location -->
+      <tr>
+        <th>Местоположение</th>
         <th>{{ task_info.task.location }}</th>
       </tr>
+      <!-- time -->
       <tr>
-        <th>Планируемое время:</th>
+        <th>Удобное время</th>
+        <th>{{ task_info.task.get_time }}</th>
+      </tr>
+      <!-- planned_time -->
+      <tr>
+        <th>Планируемое время</th>
         <th>
           {% if task_info.task_time %}
           {{ task_info.task_time.get_time }}
@@ -40,17 +62,18 @@
 
         </th>
       </tr>
+      <!-- photo -->
       {% if task_info.task.files %}
         <tr>
-        <th>Фото:</th>
+        <th>Фото</th>
           <th>
-            <img src="{{ MEDIA_URL }}{{ task_info.task.files }}" width="400"></img>
+            <img src="{{ MEDIA_URL }}{{ task_info.task.files }}" width="90%"></img>
           </th>
         </tr>
       {% endif %}
-
+      <!-- level -->
       <tr>
-        <th>Срочность: </th>
+        <th>Срочность </th>
         <th>
           {% if task_info.task_level %}
           {{ task_info.task_level.name }}
@@ -59,9 +82,9 @@
           {% endif %}
         </th>
       </tr>
-
+      <!-- state -->
       <tr>
-        <th>Статус: </th>
+        <th>Статус </th>
         <th>
           {% if task_info.task_state %}
           {{ task_info.task_state.name }}
@@ -70,9 +93,9 @@
           {% endif %}
         </th>
       </tr>
-
+      <!-- workers -->
       <tr>
-        <th>Исполнители: </th>
+        <th>Исполнители </th>
         <th>
           {% if task_info.task_workers %}
           {% for worker in task_info.task_workers %}

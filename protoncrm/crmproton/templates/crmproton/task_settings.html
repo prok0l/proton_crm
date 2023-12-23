@@ -1,62 +1,116 @@
+<!--/task/ -->
+
 {% extends 'base_index.html' %}
 {% load bootstrap %}
 
 
-{% block title %}Создать заявку{% endblock %}
+{% block title %}Настроить заявку{% endblock %}
 
 {% block content %}
 {% load static %}
 <style>
     .checkselect-control select {
         height: 35px;
+        width: 90%;
     }
 </style>
-<main class="container mt-1 p-5">
+<main class="container mt-2">
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table class="table table-striped">
             <tbody>
+            <!-- id -->
             <tr>
                 <th>Заявка</th>
                 <th>{{ task_info.task.id }}</th>
             </tr>
-
+            <!-- text -->
             <tr>
                 <th>Текст:</th>
                 <th>{{ task_info.task.name }}</th>
             </tr>
-
+            <!-- customer -->
             <tr>
                 <th>Заказчик:</th>
                 <th>{{ task_info.task.customer }}</th>
             </tr>
-
+            <!-- telephone -->
+            <tr>
+        <th>Телефон</th>
+        <th>{% if task_info.task.telephone %}
+              {{ task_info.task.telephone }}
+            {% else %}
+              Не указано
+            {% endif %}
+        </th>
+      </tr>
+            <!-- building -->
+            <tr>
+        <th>Здание</th>
+        <th>{{ task_info.task.building }}</th>
+      </tr>
+            <!-- location -->
             <tr>
                 <th>Местоположение:</th>
                 <th>{{ task_info.task.location }}</th>
             </tr>
+            <!-- time -->
+            <tr>
+        <th>Удобное время</th>
+        <th>{{ task_info.task.get_time }}</th>
+      </tr>
+            <!-- planned time -->
             <tr>
                 <th>Планируемое время: </th>
-                <th><input type="datetime-local" id="localdate" name="date"
-                value="{{ task_info.task_time.get_time }}"/></th>
+                {% if user.is_admin %}
+                <th><input class="form-control" type="datetime-local"
+                           id="localdate" name="date"
+                value="{{ task_info.task_time.get_time }}"
+                           style="max-width: 180px;"/></th>
+                {% else %}
+                <th>{% if task_info.task_time.time %}
+                        {{ task_info.task_time.get_time }}
+                    {% else %}
+                        не указано
+                    {% endif %}
+                </th>
+                {% endif %}
             </tr>
+            <!-- photo -->
             <tr>
             {% if task_info.task.files %}
                 <th>Фото:</th>
                 <th>
                     <img src="{{ MEDIA_URL }}{{ task_info.task.files }}"
-                         width="400"></img>
+                         width="90%"></img>
+                </th>
+            {% endif %}
+            </tr>
+            <!-- photo confirmation -->
+            {% if user.is_admin %}
+            <tr>
+                <th>Фото- подтверждение</th>
+                <th>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox"
+                               id="photo_required" name="photo_required"
+                               {% if task_info.task.photo_required %}
+                               checked
+                               {% endif %}
+                               style="width: 3em; height: 1.5em"
+                        >
+                    </div>
                 </th>
             </tr>
             {% endif %}
-
+            <!-- level -->
             <tr>
-                <th>Срочность:</th>
+                <th>Приоритет:</th>
                 <th>
                     {% if user.is_admin %}
                     <select name="level" class="form-select form-select-sm"
-                            style="max-width: 200px; font-size: 0.8rem; height: 35px">
+                            style="max-width: 180px; font-size: 0.8rem; height: 35px">
                         {% if task_info.task_level %}
                         <option disabled selected="selected">
                           {{task_info.task_level.name }}
@@ -81,12 +135,12 @@
                     {% endif %}
                 </th>
             </tr>
-
+            <!-- state -->
             <tr>
                 <th>Статус:</th>
                 <th>
-                    <select name="state" class="form-select form-select-sm"
-                            style="max-width: 200px; font-size: 0.8rem; height: 35px">
+                    <select name="state" class="form-select form-select"
+                            style="max-width: 180px; font-size: 0.8rem; height: 35px">
                         {% if task_info.task_state %}
                         <option disabled selected="selected">
                           {{task_info.task_state.name }}
@@ -101,9 +155,18 @@
                         {% endif %}
                         {% endfor %}
                     </select>
+                    {% if not user.is_admin and task_info.task.photo_required %}
+                        <br>
+                        <input class="form-control" type="file" accept="image/*" id="id_files"
+                        name="files" required/>
+                    {% endif %}
+                    {% if task_info.task_state_photo %}
+                        <img src="{{ MEDIA_URL }}{{ task_info.task_state_photo }}"
+                         width="90%"></img>
+                    {% endif %}
                 </th>
             </tr>
-
+            <!-- workers -->
             <tr>
                 <th>Исполнители:</th>
                 <th>
@@ -135,7 +198,7 @@
         </table>
         <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
-    <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
-    <script src="{% static 'js/plugin_checkbox.js' %}"></script>
 </main>
+<script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
+<script src="{% static 'js/plugin_checkbox.js' %}"></script>
 {% endblock %}

@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from crmproton.views import login, index, info, page404, task_list,\
-    task_settings
+    task_settings, account, change_password
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +30,8 @@ urlpatterns = [
     path('task_list/', task_list),
     path('task_list/<str:state_n>/', task_list),
     path('task/<int:task_id>/', task_settings, name="task"),
+    path('account/', account),
+    path('account/change_password/', change_password, name="change_password"),
     path('', include("crmproton.urls")),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) +\
               static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

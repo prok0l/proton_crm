@@ -1,9 +1,5 @@
-from django.core.validators import MinValueValidator
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.db.models.fields.files import ImageFieldFile, FileField
 
-from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
 
@@ -12,20 +8,43 @@ class CustomUser(AbstractUser):
     name = models.CharField(max_length=240)
 
     is_admin = models.BooleanField(default=False)
+    tg_id = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.username
+            return self.username
 
     class Meta:
         verbose_name_plural = "Пользователи"
+
+
+class Buildings(models.Model):
+    address = models.CharField(max_length=2400)
+    short_name = models.CharField(max_length=240)
+
+    def __str__(self):
+        return self.short_name
+
+    class Meta:
+        verbose_name_plural = "Здания"
 
 
 class Tasks(models.Model):
     name = models.CharField(max_length=2400)
     files = models.ImageField(blank=True)
     customer = models.CharField(max_length=240)
+    telephone = models.CharField(max_length=240, blank=True, null=True)
+    time = models.DateTimeField(blank=True, null=True)
+    building = models.ForeignKey(Buildings, on_delete=models.CASCADE)
     location = models.CharField(max_length=240)
     creation_date = models.DateTimeField(auto_now=True)
+    photo_required = models.BooleanField(default=False)
+
+    @property
+    def get_time(self):
+        if self.time:
+            return self.time.strftime('%Y-%m-%d %H:%M')
+        else:
+            return "Не указано"
 
     class Meta:
         verbose_name_plural = "Задачи"
@@ -40,6 +59,8 @@ class TasksTime(models.Model):
     creation_date = models.DateTimeField(auto_now=True)
     from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
                                   null=True)
+    is_overdue = models.BooleanField(default=False)
+    is_reminded = models.BooleanField(default=False)
     time = models.DateTimeField()
 
     @property
@@ -68,6 +89,7 @@ class TasksLevels(models.Model):
     creation_date = models.DateTimeField(auto_now=True)
     from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
                                   null=True)
+
     class Meta:
         verbose_name_plural = "Срочность задач"
 
@@ -91,6 +113,8 @@ class TasksStates(models.Model):
     creation_date = models.DateTimeField(auto_now=True)
     from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,
                                   null=True)
+    photo = models.ImageField(blank=True)
+
     class Meta:
         verbose_name_plural = "Состояния задач"
 
@@ -108,3 +132,17 @@ class TasksUsers(models.Model):
     class Meta:
         verbose_name_plural = "Исполнители задач"
 
+
+class BuildingsUsers(models.Model):
+    building = models.ForeignKey(Buildings, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.building} - {self.user}"
+
+    class Meta:
+        verbose_name_plural = "Здания исполнителей"
+
+
+class TelegramIds(models.Model):
+    tg_id = models.IntegerField(unique=True)

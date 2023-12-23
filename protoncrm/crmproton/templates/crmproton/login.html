@@ -2,31 +2,41 @@
 
 {% extends 'base_index.html' %}
 {% load bootstrap %}
+{% load static %}
 
 
 {% block title %}Войти - Proton CRM{% endblock %}
 
 {% block content %}
-<div class="login_form_center">
+    <link rel="stylesheet" href="{% static 'css/password.css' %}">
+{% for msg in messages %}
+    <div class="alert alert-danger" role="alert">
+        Ошибка! <a href="#" class="alert-link">{{ msg }}</a>
+    </div>
+{% endfor %}
+<div class="login_form_center m-5">
     <form method="post">
         {% csrf_token %}
+
         <fieldset>
             <legend>Войти</legend>
             <div class="form-floating mb-3">
-            {{ form.username|bootstrap }}
-                <!-- <input type="text" class="form-control" id="username" placeholder="name@example.com">
-                <label for="username">Имя пользователя</label> -->
+                {{ form.username|bootstrap }}
             </div>
-            <div class="form-floating">
-                {{ form.password|bootstrap }}
-                <!-- <input type="password" class="form-control" id="password" placeholder="Пароль">
-                <label for="password">Пароль</label> -->
+            <div class="password">
+                <input type="password" name="password"
+                       class="form-control form-control" placeholder="Пароль"
+                       id="id_password" required>
+                <a href="#" class="password-control"
+                   onclick="return show_hide_password(this, 'id_password');">
+
+                </a>
             </div>
         </fieldset>
         <p></p>
-        <button type="submit" class="btn btn-primary">Войти</button>
-        <a href="/login/forgot/"><button type="button" class="btn btn-danger">Забыли пароль?</button></a>
+        <button type="submit" class="btn btn-primary" style="width: 200px">Войти</button>
     </form>
 
 </div>
+    <script src="{% static 'js/password.js' %}"></script> <!-- Подключаем плагин локально -->
 {% endblock %}

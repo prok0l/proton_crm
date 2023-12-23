@@ -4,12 +4,11 @@
 {% load bootstrap %}
 
 
-{% block title %}Создать заявку{% endblock %}
+{% block title %}Заявки{% endblock %}
 
 {% block content %}
 <main class="container mt-1 p-1">
-
-    <h2>{{ state }}</h2>
+    <h2>{{ state }}:</h2>
         <div class="row row-cols-1 row-cols-md-5 g-2">
             {% for task in tasks %}
             <div class="col">
@@ -25,6 +24,9 @@
             </div>
             {% endfor %}
         </div>
+        {% if not tasks %}
+            <h3 style="padding-left: 10px">Нет задач</h3>
+        {% endif %}
         <p><h5>Другие статусы: </h5></p>
         <div>
             <div data-filter-title="task">
@@ -44,6 +46,4 @@
             </div>
         </div>
 </main>
-
-
 {% endblock %}

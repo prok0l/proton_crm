@@ -1,0 +1,62 @@
+<!-- /account/ -->
+
+{% extends 'base_index.html' %}
+
+
+{% block title %}Настроить аккаунт{% endblock %}
+{% load static %}
+{% block content %}
+
+<main class="container mt-1 p-5">
+    {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }}" role="alert">
+            <a href="#" class="alert-link">{{ msg }}</a>
+        </div>
+    {% endfor %}
+    <table class="table table-striped">
+        <div class="card mb-3">
+            <h3 class="card-header">Основные данные</h3>
+            <div class="card-body">
+              <!-- <h5 class="card-title">Special title treatment</h5> -->
+              <h6 class="card-subtitle ">
+                <label class="form-label mt-4" for="readOnlyInput">Ваше имя:</label>
+                <input class="form-control" id="readOnlyInput" type="text" placeholder="{{ user.name }}" readonly="">
+
+                <label class="form-label mt-4" for="readOnlyInput">Имя пользователя:</label>
+                <input class="form-control" id="readOnlyInput" type="text" placeholder="{{ user }}" readonly="">
+
+                <label class="form-label mt-4" for="readOnlyInput">Адрес электронной почты:</label>
+                <input class="form-control" id="readOnlyInput" type="text" placeholder="{{ user.email }}" readonly="">
+                <label class="form-label mt-4" for="readOnlyInput">Тип учётной записи:</label>
+                  {% if user.is_admin %}
+                    <input class="form-control" id="readOnlyInput" type="text" placeholder="Админ" readonly="">
+                  {% else %}
+                    <input class="form-control" id="readOnlyInput" type="text" placeholder="Исполнитель" readonly="">
+                  {% endif %}
+                  {% if user.tg_id %}
+                      <label class="form-label mt-4" for="readOnlyInput">Telegram ID:</label>
+                    <input class="form-control" id="readOnlyInput" type="text" placeholder="{{ user.tg_id }}" readonly="">
+                  {% endif %}
+                  <br>
+                  <a class="btn btn-outline-danger" href="change_password">Сменить пароль</a>
+              </h6>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                <h3 class="card-header">Уведомления</h3>
+                <div class="card-body">
+                  <!-- <h5 class="card-title">Special title treatment</h5> -->
+                  <h6 class="card-subtitle ">
+                    <label class="form-label mt-4" for="tg_input">Ваш ID:</label>
+                    <input class="form-control" id="tg_input" name="tg_input" type="text" placeholder="Ваш id:">
+                      <br>
+                      <button type="submit" class="btn btn-outline-danger">Отправить</button>
+                  </h6>
+                </div>
+            </form>
+        </div>
+    </table>
+</main>
+{% endblock %}

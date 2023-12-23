@@ -15,6 +15,7 @@ class CustomUserAdmin(UserAdmin):
                     "name",
                     "username",
                     "is_admin",
+                    "tg_id",
                     )
     list_filter = (
         "is_admin",
@@ -36,7 +37,7 @@ class CustomUserAdmin(UserAdmin):
         (
             'Additional info',
             {
-                'fields': ('is_admin',),
+                'fields': ('is_admin', 'tg_id'),
             }
         )
     )
@@ -52,7 +53,7 @@ class CustomUserAdmin(UserAdmin):
         (
             'Additional info',
             {
-                'fields': ('is_admin', ),
+                'fields': ('is_admin', 'tg_id'),
             }
         )
     )
@@ -60,15 +61,17 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Tasks)
 class TasksAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "files", "customer", "location",
-                    "creation_date")
+    list_display = ("id", "name", "customer", "location",
+                    "creation_date", "building", "telephone", "time",
+                    "photo_required")
     list_filter = ("id", "name")
 
 
 @admin.register(TasksTime)
 class TaskTimeAdmin(admin.ModelAdmin):
-    list_display = ("task", "time", "creation_date")
-    list_filter = ("task", )
+    list_display = ("task", "time", "creation_date", "from_user", "is_overdue",
+                    "is_reminded", )
+    list_filter = ("from_user", "is_overdue", "time", )
 
 
 @admin.register(Levels)
@@ -79,7 +82,7 @@ class LevelsAdmin(admin.ModelAdmin):
 
 @admin.register(TasksLevels)
 class TasksLevelsAdmin(admin.ModelAdmin):
-    list_display = ("task", "level", "creation_date")
+    list_display = ("task", "level", "creation_date", "from_user")
     list_filter = ("task", )
 
 
@@ -91,14 +94,26 @@ class StatesAdmin(admin.ModelAdmin):
 
 @admin.register(TasksStates)
 class TasksStatesAdmin(admin.ModelAdmin):
-    list_display = ("task", "state", "creation_date")
+    list_display = ("task", "state", "creation_date", "from_user", "photo")
     list_filter = ("task", )
 
 
 @admin.register(TasksUsers)
 class TasksUsersAdmin(admin.ModelAdmin):
-    list_display = ("task", "user", "is_active", "creation_date")
+    list_display = ("task", "user", "is_active", "creation_date", "from_user")
     list_filter = ("task", "user", "is_active")
+
+
+@admin.register(Buildings)
+class BuildingsAdmin(admin.ModelAdmin):
+    list_display = ('address', 'short_name', )
+    list_filter = ('address', 'short_name',)
+
+
+@admin.register(BuildingsUsers)
+class BuildingsUsersAdmin(admin.ModelAdmin):
+    list_display = ('building', 'user', )
+    list_filter = ('building', 'user', )
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
