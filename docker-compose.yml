@@ -12,6 +12,8 @@ services:
       - "protoncrm/.env"
     ports:
       - 8000:8000
+    volumes:
+      - .:/proton_crm
 
   notify:
     container_name: proton_crm_notify
@@ -23,6 +25,8 @@ services:
       - botnet
     env_file:
       - "protoncrm/.env"
+    volumes:
+      - .:/proton_crm
 
 networks:
   botnet:
