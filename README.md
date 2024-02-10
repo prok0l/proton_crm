@@ -26,7 +26,7 @@
 [<img src="docs/img/contract2.jpg" width="300px">](docs/img/contract2.jpg)
 
 ---
-[Презентация проетка](docs/presentation.pptx)\
+[Презентация проекта](docs/presentation.pptx)\
 [Пояснительная записка](docs/proton_crm.docx)
 
 ---
