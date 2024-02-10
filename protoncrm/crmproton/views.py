@@ -5,9 +5,10 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib import messages
-from crmproton.forms import LoginUser
+from aiogram import Bot, Dispatcher
 
 from crmproton.models import *
+from crmproton.forms import LoginUser
 from django.conf import settings
 
 from services.taskinfo import TaskInfoStart
@@ -60,6 +61,8 @@ def index(request):
         link.save()
         link = TasksStates(task=task, state=States.objects.get(is_start=True))
         link.save()
+        dp = Dispatcher.get_current()
+        print(dp.bot)
         return redirect(info, task.id)
 
     return render(request, 'index.html',
@@ -135,9 +138,13 @@ def task_settings(request, task_id):
 
     else:
         data = dict(request.POST)
-
+        time_links = list(TasksTime.objects.filter(task=task))
         if data.get('state'):
             state = States.objects.get(name=data.get('state')[-1])
+            if state.is_end:
+                obj = time_links[-1]
+                obj.is_overdue = True
+                obj.save()
             if len(request.FILES) == 0:
                 file = None
             else:
@@ -155,12 +162,13 @@ def task_settings(request, task_id):
                 task.save()
 
             if data.get('date'):
-                link = list(TasksTime.objects.filter(task=task))
                 new_date = data.get('date')[0]
-                if new_date and (not link or link[-1].get_time
-                                 != new_date):
-                    if link:
-                        link_obj = link[-1]
+                if new_date and (not time_links or time_links[-1].get_time
+                                 != datetime.strptime(
+                            new_date, '%Y-%m-%dT%H:%M')
+                            .strftime('%Y-%m-%d %H:%M')):
+                    if time_links:
+                        link_obj = time_links[-1]
                         if link_obj:
                             link_obj.is_overdue = True
                             link_obj.save()
@@ -196,8 +204,11 @@ def task_settings(request, task_id):
 def account(request):
     if request.user.is_authenticated:
         if request.method == "GET":
+            buildings = [x.building.address for x in
+                         BuildingsUsers.objects.filter(user=request.user)]
             return render(request, "account.html",
-                          {"user": request.user})
+                          {"user": request.user, "addresses": buildings,
+                           "bot_link": settings.BOT_LINK})
         else:
             tg_id = request.POST.get('tg_input')
             if tg_id:

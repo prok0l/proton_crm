@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
-from crmproton.models import TelegramIds, TasksTime, TasksUsers, BuildingsUsers
+from crmproton.models import (TelegramIds, TasksTime, TasksUsers,
+                              BuildingsUsers, CustomUser)
 
 from asgiref.sync import sync_to_async
 
@@ -49,3 +50,13 @@ def get_info_about_overdue(link: TasksTime, is_overdue: bool = True):
 def create_user(tg_id: int):
     TelegramIds(tg_id=tg_id).save()
     return None
+
+
+@sync_to_async
+def deeplink(username: str, tg_id: int):
+    user = CustomUser.objects.filter(username=username)
+    if not user:
+        return False
+    user[0].tg_id = tg_id
+    user[0].save()
+    return True

@@ -13,7 +13,7 @@ from django.conf import settings
 
 
 host = settings.ALLOWED_HOSTS
-host = host[1] if host else 'http://127.0.0.1:8080'
+host = host[-1] if host else 'http://127.0.0.1:8080'
 
 
 bot: Bot
