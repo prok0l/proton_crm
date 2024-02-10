@@ -1,4 +1,4 @@
-# Репозиторий CRM системы [Образовательного центра протон](https://proton.mskobr.ru/)
+# Репозиторий CRM системы [«Образовательного центра Протон»](https://proton.mskobr.ru/)
 
 ## Разработан [prok0l](https://github.com/prok0l), по тз администрации ОЦ
 
@@ -22,10 +22,12 @@
     ```
 
 ---
-
 [<img src="docs/img/contract1.jpg" width="300px">](docs/img/contract1.jpg)
 [<img src="docs/img/contract2.jpg" width="300px">](docs/img/contract2.jpg)
 
+---
+[Презентация проетка](docs/presentation.pptx)\
+[Пояснительная записка](docs/proton_crm.docx)
 
 ---
 ### License
