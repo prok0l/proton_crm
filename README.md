@@ -16,6 +16,11 @@
     REMIND_TIME=60
     BOT_LINK=
     ```
+- создание миграций
+    ```shell
+      python3 protoncrm/manage.py makemigrations
+      python3 protoncrm/manage.py migrate
+    ```
 - запуск проекта
     ```shell
     docker-compose up
