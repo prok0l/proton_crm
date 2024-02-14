@@ -5,7 +5,6 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib import messages
-from aiogram import Bot, Dispatcher
 
 from crmproton.models import *
 from crmproton.forms import LoginUser
@@ -61,8 +60,6 @@ def index(request):
         link.save()
         link = TasksStates(task=task, state=States.objects.get(is_start=True))
         link.save()
-        dp = Dispatcher.get_current()
-        print(dp.bot)
         return redirect(info, task.id)
 
     return render(request, 'index.html',
